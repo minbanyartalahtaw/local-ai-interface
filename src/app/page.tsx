@@ -22,8 +22,16 @@ interface Chat {
 }
 
 export default function Home() {
+  const defaultChat: Chat = {
+    id: 1,
+    title: "Click me To Edit Chat Name",
+    messages: [],
+  };
+  const [loading, setLoading] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(1);
-  const sampleChat: Chat = {
+  const [chat, setChat] = useState<Chat>(defaultChat);
+
+  /*   const sampleChat: Chat = {
     id: 1,
     title: "Apple",
     messages: [
@@ -148,47 +156,68 @@ export default function Home() {
           "Try adding fruit to breakfast (oatmeal, yogurt, smoothies), keeping cut fruit visible in your refrigerator, freezing fruit for smoothies, adding fruit to salads, using fruit as a natural sweetener in baking, or simply keeping a bowl of ready-to-eat fruit on your counter or desk.",
       },
     ],
-  };
+  }; */
 
   const changeCurrentMessage = (messageId: number) => {
     setCurrentMessage(messageId);
   };
 
   const sendMessage = async (formData: FormData) => {
+    if (!formData.get("question")) {
+      return;
+    }
+    setLoading(true);
     // response {status : true , question : ""}
     const response = await askQuestion(formData);
-    console.log(response);
+    const newMessage: Message = {
+      id: chat.messages.length + 1,
+      question: formData.get("question") as string,
+      answer: response.answer,
+    };
+    const updatedChat: Chat = {
+      ...chat,
+      messages: [...chat.messages, newMessage],
+    };
+    setLoading(false);
+    setChat(updatedChat);
+    setCurrentMessage(updatedChat.messages.length);
   };
 
   return (
-    <div className="flex justify-around w-screen items-center h-[calc(100vh-50px)] p-5">
+    <div className="flex justify-around w-screen items-center h-[85vh] xl:h-[95vh] p-5">
       <div className="w-full h-full">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel>
             <div className="bg-white w-full h-full rounded-md shadow-sm relative flex flex-col">
               <div className="flex-1 overflow-hidden">
                 <div className="p-4 h-full flex flex-col">
-                  <h2 className="text-lg font-medium mb-3 text-gray-800 bg-amber-100 p-5 rounded-2xl">
-                    {sampleChat.title}
+                  <h2 className="text-lg font-medium mb-3 text-gray-800 bg-amber-100 p-5 rounded-2xl min-w-[285px]">
+                    {chat.title}
                   </h2>
                   <h4 className="text-lg font-sm mb-3 text-gray-800">
                     Questions
                   </h4>
                   <div className="space-y-2  overflow-scroll h-[calc(100vh-200px)] ">
-                    {sampleChat.messages.map((message, index) => (
-                      <div
-                        key={message.id}
-                        className={`p-3 ${
-                          currentMessage === message.id
-                            ? "bg-blue-100"
-                            : "bg-gray-50"
-                        } rounded-md hover:bg-gray-100 transition-colors cursor-pointer `}
-                        onClick={() => changeCurrentMessage(message.id)}>
-                        <h3 className="text-sm text-gray-700">
-                          {index + 1}. {message.question}
-                        </h3>
+                    {chat.messages.length === 0 ? (
+                      <div className="p-3  rounded-md text-center text-gray-700">
+                        Ask Your First Question
                       </div>
-                    ))}
+                    ) : (
+                      chat.messages.map((message, index) => (
+                        <div
+                          key={message.id}
+                          className={`p-3 min-w-[285px] ${
+                            currentMessage === message.id
+                              ? "bg-blue-100"
+                              : "bg-gray-100"
+                          } rounded-md  transition-colors cursor-pointer select-none hover:shadow-md`}
+                          onClick={() => changeCurrentMessage(message.id)}>
+                          <h3 className="text-sm text-gray-700">
+                            {index + 1}. {message.question}
+                          </h3>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -212,26 +241,33 @@ export default function Home() {
               </div>
             </div>
           </ResizablePanel>
+
           <ResizableHandle withHandle />
 
           <ResizablePanel>
             {" "}
             <div className="bg-slate-100 w-full h-full rounded-lg shadow-sm ">
-              <div className="p-4 h-full flex flex-col">
-                <h2 className="text-lg font-medium mb-3 text-gray-800">
-                  Question : {sampleChat.messages[currentMessage - 1].question}
-                </h2>
-                <h2 className="text-lg font-medium mb-3 text-gray-800">
-                  Answer
-                </h2>
-                <div className="overflow-auto h-[calc(100vh-200px)]">
-                  <div className="prose prose-sm max-w-none">
-                    <ReactMarkdown>
-                      {sampleChat.messages[currentMessage - 1].answer}
-                    </ReactMarkdown>
+              {chat.messages.length === 0 ? (
+                <div className="p-3  rounded-md text-center text-gray-700">
+                  Ask Your First Question
+                </div>
+              ) : (
+                <div className="p-4 h-full flex flex-col">
+                  <h2 className="text-lg font-medium mb-3 text-gray-800">
+                    Question : {chat.messages[currentMessage - 1].question}
+                  </h2>
+                  <h2 className="text-lg font-medium mb-3 text-gray-800">
+                    Answer
+                  </h2>
+                  <div className="overflow-auto h-[calc(100vh-200px)]">
+                    <div className="prose prose-sm max-w-none">
+                      <ReactMarkdown>
+                        {chat.messages[currentMessage - 1].answer}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

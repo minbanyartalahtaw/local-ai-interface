@@ -6,10 +6,10 @@ export async function askQuestion(formData: FormData) {
     return { status: false, answer: "Question is required" };
   }
   const ai_response = await axios.post("http://localhost:11434/api/generate", {
-    model: "codellama:latest", // or your model name
+    model: "llama3:latest", // or your model name
     prompt: question,
     stream: false,
   });
-  console.log(ai_response);
-  return { status: true, answer: "Fuck You." };
+  const ai_asnwer = ai_response.data.response;
+  return { status: true, answer: ai_asnwer };
 }
