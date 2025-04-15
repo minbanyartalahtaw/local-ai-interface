@@ -1,13 +1,23 @@
 "use client";
-import { ArrowUp } from "lucide-react";
-import { useState } from "react";
+import { ArrowUp, Trash2, Plus, Star, Settings } from "lucide-react";
+
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { askQuestion } from "./action";
+import { askQuestion, createChat } from "./action";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 interface Message {
   id: number;
@@ -24,14 +34,15 @@ interface Chat {
 export default function Home() {
   const defaultChat: Chat = {
     id: 1,
-    title: "Click me To Edit Chat Name",
+    title: "",
     messages: [],
   };
-  const [loading, setLoading] = useState(false);
+  const [save, setSave] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentMessage, setCurrentMessage] = useState(1);
   const [chat, setChat] = useState<Chat>(defaultChat);
 
-  /*   const sampleChat: Chat = {
+  /*   const sampleChat: Chatf = {
     id: 1,
     title: "Apple",
     messages: [
@@ -161,45 +172,138 @@ export default function Home() {
   const changeCurrentMessage = (messageId: number) => {
     setCurrentMessage(messageId);
   };
-
-  const sendMessage = async (formData: FormData) => {
-    if (!formData.get("question")) {
+  const newChat = () => {
+    setChat(defaultChat);
+    setSave(false);
+  };
+  const savedMessage = async (isChatSaved: boolean) => {
+    if (isChatSaved) {
       return;
     }
-    setLoading(true);
-    // response {status : true , question : ""}
-    const response = await askQuestion(formData);
-    const newMessage: Message = {
-      id: chat.messages.length + 1,
-      question: formData.get("question") as string,
-      answer: response.answer,
-    };
-    const updatedChat: Chat = {
-      ...chat,
-      messages: [...chat.messages, newMessage],
-    };
-    setLoading(false);
-    setChat(updatedChat);
-    setCurrentMessage(updatedChat.messages.length);
+    await createChat(chat);
+    setSave(!save);
   };
 
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-around w-screen justify-items-center h-[85vh] xl:h-[95vh] p-5">
+        <div className="w-full h-full">
+          <div className="flex gap-4 h-full">
+            {/* Left Skeleton */}
+            <div className="w-1/2 bg-transparent rounded-md shadow-sm p-4 flex flex-cols items-center justify-center ">
+              <div className="h-16 w-16 border-4 border-gray-300 border-t-gray-800 rounded-full animate-spin"></div>
+            </div>
+
+            {/* Right Skeleton */}
+            <div className="w-1/2 bg-gray-100 rounded-lg shadow-sm p-6">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded-md w-3/4 mb-4"></div>
+                <div className="space-y-3">
+                  {[...Array(4)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-4 bg-gray-200 rounded-md w-full"></div>
+                  ))}
+                  <div className="h-4 bg-gray-200 rounded-md w-2/3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex justify-around w-screen items-center h-[85vh] xl:h-[95vh] p-5">
+    <div className="flex justify-around w-screen justify-items-center h-[85vh] xl:h-[95vh] p-5">
       <div className="w-full h-full">
         <ResizablePanelGroup direction="horizontal">
+          {/* Left */}
           <ResizablePanel>
             <div className="bg-white w-full h-full rounded-md shadow-sm relative flex flex-col">
               <div className="flex-1 overflow-hidden">
                 <div className="p-4 h-full flex flex-col">
-                  <h2 className="text-lg font-medium mb-3 text-gray-800 bg-amber-100 p-5 rounded-2xl min-w-[285px]">
-                    {chat.title}
-                  </h2>
-                  <h4 className="text-lg font-sm mb-3 text-gray-800">
-                    Questions
-                  </h4>
-                  <div className="space-y-2  overflow-scroll h-[calc(100vh-200px)] ">
+                  {/* Drawer */}
+                  <Drawer>
+                    <DrawerTrigger>
+                      <h2 className="cursor-pointer text-lg mb-3 text-gray-800 bg-amber-100 p-5 rounded-2xl min-w-[285px] flex justify-center items-center">
+                        Chat Settings <Settings className="ml-5" />
+                      </h2>
+                    </DrawerTrigger>
+
+                    <DrawerContent>
+                      <DrawerHeader>
+                        <DrawerTitle className="text-center">
+                          Are you absolutely sure?
+                        </DrawerTitle>
+                        {/* Container */}
+                        <div className="h-70 flex items-center justify-center">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+                            {/* Left */}
+                            <div className="h-20 flex items-center justify-center rounded-md">
+                              <h3>You asked </h3>
+                              <span className="text-3xl font-bold mx-10">
+                                {chat.messages.length}
+                              </span>
+                              <h3>Questions</h3>
+                            </div>
+                            {/* Middle */}
+                            <div
+                              className={`grid gap-4 col-span-1 sm:col-span-1 md:col-span-2 grid-cols-2`}>
+                              <div
+                                onClick={newChat}
+                                className="h-20 bg-gray-300 flex items-center justify-center rounded-md cursor-pointer">
+                                <Plus className="text-white" />
+                              </div>
+                              {save ? (
+                                <div className="h-20 bg-red-400 flex items-center justify-center rounded-md cursor-pointer">
+                                  <Trash2 className="text-white" />
+                                </div>
+                              ) : (
+                                <div
+                                  onClick={() => savedMessage(save)}
+                                  className={`h-20 flex items-center justify-center rounded-md ${
+                                    save
+                                      ? "bg-green-300 cursor-not-allowed"
+                                      : "bg-blue-300 cursor-pointer"
+                                  }`}>
+                                  <Star
+                                    className="text-white"
+                                    fill={save ? "white" : "none"}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            {/* Right */}
+                            <div className="h-20 flex items-center justify-center rounded-md ">
+                              <span className="text-red-700">
+                                {save
+                                  ? "Delete from Database"
+                                  : "Unsaved Chat Will be Delete When Refresh"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </DrawerHeader>
+                      <DrawerFooter>
+                        <DrawerClose>Close</DrawerClose>
+                      </DrawerFooter>
+                    </DrawerContent>
+                  </Drawer>
+                  {/* Question  */}
+                  {chat.messages.length !== 0 && (
+                    <h4 className="text-lg font-sm mb-3 text-gray-800">
+                      Questions
+                    </h4>
+                  )}
+                  {/* Message Title */}
+                  <div className="space-y-2 overflow-scroll h-[calc(100vh-200px)]">
                     {chat.messages.length === 0 ? (
-                      <div className="p-3  rounded-md text-center text-gray-700">
+                      <div className="p-3 rounded-md text-center text-gray-700 border-x-1 h-full flex items-center justify-center">
                         Ask Your First Question
                       </div>
                     ) : (
@@ -210,7 +314,7 @@ export default function Home() {
                             currentMessage === message.id
                               ? "bg-blue-100"
                               : "bg-gray-100"
-                          } rounded-md  transition-colors cursor-pointer select-none hover:shadow-md`}
+                          } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
                           onClick={() => changeCurrentMessage(message.id)}>
                           <h3 className="text-sm text-gray-700">
                             {index + 1}. {message.question}
@@ -224,7 +328,33 @@ export default function Home() {
 
               {/* User Input */}
               <div className="p-3 border-t border-gray-100">
-                <form action={sendMessage} className="flex items-center gap-2">
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(e.currentTarget);
+                    if (!formData.get("question")) {
+                      return;
+                    }
+                    setLoading(true);
+                    try {
+                      const response = await askQuestion(formData);
+                      const newMessage = {
+                        id: chat.messages.length + 1,
+                        question: formData.get("question") as string,
+                        answer: response.answer,
+                      };
+                      const updatedChat = {
+                        ...chat,
+                        messages: [...chat.messages, newMessage],
+                      };
+                      setChat(updatedChat);
+                      setCurrentMessage(updatedChat.messages.length);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="flex items-center gap-2">
                   <input
                     name="question"
                     type="text"
@@ -244,26 +374,31 @@ export default function Home() {
 
           <ResizableHandle withHandle />
 
+          {/* Right */}
           <ResizablePanel>
             {" "}
-            <div className="bg-slate-100 w-full h-full rounded-lg shadow-sm ">
+            <div className="bg-gray-100 w-full h-full rounded-lg shadow-sm ">
               {chat.messages.length === 0 ? (
-                <div className="p-3  rounded-md text-center text-gray-700">
+                <div className="p-3 rounded-md text-center text-gray-700 h-full flex items-center justify-center">
                   Ask Your First Question
                 </div>
               ) : (
-                <div className="p-4 h-full flex flex-col">
-                  <h2 className="text-lg font-medium mb-3 text-gray-800">
-                    Question : {chat.messages[currentMessage - 1].question}
-                  </h2>
-                  <h2 className="text-lg font-medium mb-3 text-gray-800">
-                    Answer
-                  </h2>
-                  <div className="overflow-auto h-[calc(100vh-200px)]">
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown>
-                        {chat.messages[currentMessage - 1].answer}
-                      </ReactMarkdown>
+                <div className="h-full flex flex-col p-6 bg-white rounded-lg shadow-sm">
+                  <div className="mb-4 border-b pb-3 flex justify-between items-center">
+                    <h2 className="text-xl font-semibold text-gray-800 ">
+                      {chat.messages[currentMessage - 1].question}
+                    </h2>
+                    <p className="h-6 min-w-6 bg-gray-200 rounded-full px-2 text-sm text-gray-600 flex items-center justify-center">
+                      {currentMessage}
+                    </p>
+                  </div>
+                  <div className="flex-1 overflow-auto bg-gray-50 rounded-lg">
+                    <div className="p-6">
+                      <div className="prose prose-lg max-w-none text-gray-700">
+                        <ReactMarkdown>
+                          {chat.messages[currentMessage - 1].answer}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 </div>
