@@ -1,6 +1,8 @@
 "use client";
 import { ArrowUp, Trash2, Plus, Star, Settings } from "lucide-react";
-
+import remarkGfm from 'remark-gfm';
+import hljs from 'highlight.js';
+import javascript from 'highlight.js/lib/languages/javascript';
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -266,11 +268,10 @@ export default function Home() {
                               ) : (
                                 <div
                                   onClick={() => savedMessage(save)}
-                                  className={`h-20 flex items-center justify-center rounded-md ${
-                                    save
-                                      ? "bg-green-300 cursor-not-allowed"
-                                      : "bg-blue-300 cursor-pointer"
-                                  }`}>
+                                  className={`h-20 flex items-center justify-center rounded-md ${save
+                                    ? "bg-green-300 cursor-not-allowed"
+                                    : "bg-blue-300 cursor-pointer"
+                                    }`}>
                                   <Star
                                     className="text-white"
                                     fill={save ? "white" : "none"}
@@ -310,11 +311,10 @@ export default function Home() {
                       chat.messages.map((message, index) => (
                         <div
                           key={message.id}
-                          className={`p-3 min-w-[285px] ${
-                            currentMessage === message.id
-                              ? "bg-blue-100"
-                              : "bg-gray-100"
-                          } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
+                          className={`p-3 min-w-[285px] ${currentMessage === message.id
+                            ? "bg-blue-100"
+                            : "bg-gray-100"
+                            } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
                           onClick={() => changeCurrentMessage(message.id)}>
                           <h3 className="text-sm text-gray-700">
                             {index + 1}. {message.question}
@@ -395,7 +395,42 @@ export default function Home() {
                   <div className="flex-1 overflow-auto bg-gray-50 rounded-lg">
                     <div className="p-6">
                       <div className="prose prose-lg max-w-none text-gray-700">
-                        <ReactMarkdown>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            code({ node, className, children, ...props }) {
+                              const match = /language-(\w+)/.exec(className || '');
+                              return match ? (
+                                <pre className="bg-gray-900 p-4 rounded-lg">
+                                  <code
+                                    className={`${className} text-green-400`}
+                                    dangerouslySetInnerHTML={{
+                                      __html: hljs.highlight(String(children).replace(/\n$/, ''), {
+                                        language: match[1],
+                                      }).value,
+                                    }}
+                                    {...props}
+                                  />
+                                </pre>
+                              ) : (
+                                <code className={`${className} bg-gray-200 text-gray-800 px-2 py-1 rounded`} {...props}>
+                                  {children}
+                                </code>
+                              );
+                            },
+                            // Add styling for other markdown elements
+                            p: ({ children }) => <p className="text-gray-700 mb-4">{children}</p>,
+                            h1: ({ children }) => <h1 className="text-3xl font-bold text-gray-900 mb-6">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-2xl font-semibold text-gray-800 mb-4">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-xl font-medium text-gray-800 mb-3">{children}</h3>,
+                            ul: ({ children }) => <ul className="list-disc list-inside mb-4 text-gray-700">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside mb-4 text-gray-700">{children}</ol>,
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4">
+                                {children}
+                              </blockquote>
+                            ),
+                          }}>
                           {chat.messages[currentMessage - 1].answer}
                         </ReactMarkdown>
                       </div>

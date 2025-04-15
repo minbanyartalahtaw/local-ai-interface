@@ -20,7 +20,7 @@ export async function askQuestion(formData: FormData) {
   }
   console.log(question);
   const ai_response = await axios.post("http://localhost:11434/api/generate", {
-    model: "gemma:2b", // or your model name
+    model: "mistral:latest", // or your model name
     prompt: question,
     stream: false,
   });
