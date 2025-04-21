@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interface for Local Ollama
 
-## Getting Started
+A modern web application interface for running local Ollama models, built with Next.js for the frontend, Node.js for the backend, and MongoDB for data storage. This guide covers project setup, installation instructions for all dependencies (Node.js, MongoDB, Ollama) on macOS and Linux, and how to get started.
 
-First, run the development server:
+---
+
+## **Project Features**
+
+- Next.js frontend for interactive user experience
+- Node.js backend API for model communication and data management
+- MongoDB as the primary database
+- Local Ollama model integration for AI-powered features
+
+---
+
+## **Installation Guide**
+
+### **A. Node.js and npm Installation**
+
+#### **On macOS**
+
+1. Download the Node.js macOS installer from [the official Node.js website.](https://nodejs.org/en)
+2. Verify installation:
+
+```bash
+node -v
+npm -v
+```
+
+You should see version numbers for both Node.js and npm.
+
+#### **On Linux (Ubuntu/Debian)**
+
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install nodejs
+sudo apt install npm
+node -v
+npm -v
+```
+
+You should see version numbers confirming successful installation.
+
+---
+
+### **B. MongoDB Installation**
+
+#### **On macOS (with Homebrew)**
+
+1. Install Homebrew (if not already installed):
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+2. Update Homebrew and tap MongoDB formula:
+
+```bash
+brew update
+brew tap mongodb/brew
+```
+
+3. Install MongoDB Community Edition:
+
+```bash
+brew install mongodb-community
+```
+
+This will install the latest MongoDB version[3].
+
+#### **On Linux (Ubuntu/Debian)**
+
+1. visit to the [MongoDB Offical Page](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-debian/)
+
+---
+
+### **C. Ollama Installation**
+
+#### **On macOS**
+
+1. Download Ollama from the official site.
+2. Locate the `.zip` file in your `~/Downloads` folder and extract it.
+3. Move `Ollama.app` to your Applications folder.
+4. Open `Ollama.app` and follow the setup wizard to complete installation, including the command line tool.
+
+#### **On Linux**
+
+- Visit the official Ollama website for Linux installation instructions (usually involves downloading a binary or running an install script).
+
+---
+
+## **Getting Started**
+
+### **1. Download the Project**
+
+- Download the project as a ZIP file from https://github.com/minbanyartalahtaw/local-ai-interface
+- Extract the ZIP file to your desired directory.
+
+### **2. Navigate to the Project Directory**
+
+```bash
+cd path/to/your/project-directory
+```
+
+---
+
+## **Project Setup**
+
+### **1. Install Project Dependencies**
+
+```bash
+npm install
+```
+
+This command installs all required packages for both frontend and backend.
+
+### **2. Configure Environment Variables**
+
+- Create a `.env` file in the root directory.
+- Add your MongoDB connection string and any other required environment variables.
+
+### **3. Start the Application**
+
+- For development:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- For production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## **Summary Table: Installation Steps**
 
-To learn more about Next.js, take a look at the following resources:
+| Component | macOS                                            | Linux                                            |
+| --------- | ------------------------------------------------ | ------------------------------------------------ |
+| Node.js   | Download `.pkg` and install[1]                   | `sudo apt install nodejs npm` or use NVM[2]      |
+| MongoDB   | `brew install mongodb-community`[3]              | Download, extract, and run binary[4]             |
+| Ollama    | Download ZIP, move to Applications, run setup[5] | Official Linux instructions (see Ollama website) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## **Notes**
 
-## Deploy on Vercel
+- Ensure MongoDB and Ollama are running before starting the Node.js backend.
+- For detailed configuration, consult the respective official documentation for each dependency.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

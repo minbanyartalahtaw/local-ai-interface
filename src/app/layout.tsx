@@ -27,15 +27,18 @@ export default async function RootLayout({
   const client = await getClient();
   const db = client.db("bro-code");
   const collection = db.collection("Chat");
-  const items = await collection.find(
-    {},
-    {
-      projection: {
-        _id: { $toString: "$_id" },
-        "Chat.title": 1,
-      },
-    }
-  ).toArray();
+  const items = await collection
+    .find(
+      {},
+      {
+        projection: {
+          _id: { $toString: "$_id" },
+          "Chat.title": 1,
+        },
+      }
+    )
+    .toArray();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const finalItems = items.map((item: any) => ({
     title: item.Chat.title,
     id: item._id,

@@ -1,5 +1,5 @@
-"use client"
-import { ChevronDown, MessageSquare } from "lucide-react";
+"use client";
+import { ChevronDown } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,20 +18,21 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import "@/app/globals.css";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SideBarChat {
   id: string;
   title: string;
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function AppSidebar(prop: any) {
-  const chat = prop
-  const [items, setItems] = useState<SideBarChat[]>([chat.prop])
+  const chat = prop;
+  const [items, setItems] = useState<SideBarChat[]>([chat.prop]);
+
   useEffect(() => {
-    setItems(chat.prop)
-  })
+    setItems(chat.prop);
+  }, []);
 
   return (
     <Sidebar>
@@ -46,7 +47,6 @@ export function AppSidebar(prop: any) {
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent>
-
                 <SidebarGroupContent>
                   <SidebarMenuSub>
                     {items.map((item, index) => (
