@@ -52,6 +52,11 @@ export default async function RootLayout({
           <main>
             <SidebarTrigger />
             {children}
+            <footer className="fixed bottom-0 w-full text-center pb-2">
+              <p className="text-[10px] text-gray-600">
+                © {new Date().getFullYear()} Bro Code. All rights reserved.
+              </p>
+            </footer>
           </main>
         </SidebarProvider>
       </body>

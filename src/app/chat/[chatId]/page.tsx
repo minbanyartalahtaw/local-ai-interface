@@ -117,15 +117,15 @@ export default function ChatBox() {
                   {/* Drawer */}
                   <Drawer>
                     <DrawerTrigger>
-                      <h2 className="cursor-pointer text-lg mb-3 text-gray-800 bg-amber-100 p-5 rounded-2xl min-w-[285px] flex justify-center items-center">
-                        Chat Settings <Settings className="ml-5" />
-                      </h2>
+                      <p className="w-full py-2.5 mb-5 px-4 flex items-center justify-center gap-2 text-gray-700 hover:text-gray-900 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm hover:shadow-md">
+                        Chat Settings <Settings className="w-4 h-4" />
+                      </p>
                     </DrawerTrigger>
 
                     <DrawerContent className="max-h-[90vh] overflow-y-auto">
                       <DrawerHeader>
-                        <DrawerTitle className="text-center text-xl md:text-2xl text-green-600">
-                          This Chat is Saved.
+                        <DrawerTitle className="text-center text-xl md:text-2xl">
+                          Are you absolutely sure?
                         </DrawerTitle>
                         {/* Container */}
                         <div className="min-h-[200px] p-4 flex items-center justify-center">
@@ -203,11 +203,10 @@ export default function ChatBox() {
                     {chat.messages.map((message, index) => (
                       <div key={message.id} className="flex items-center">
                         <div
-                          className={`p-3 w-full ${
-                            currentMessage === message.id
-                              ? "bg-blue-100"
-                              : "bg-gray-100"
-                          } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
+                          className={`p-3 w-full ${currentMessage === message.id
+                            ? "bg-blue-100"
+                            : "bg-gray-100"
+                            } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
                           onClick={() => changeCurrentMessage(message.id)}>
                           <h3 className="text-sm text-gray-700">
                             {index + 1}. {message.question}
@@ -274,9 +273,9 @@ export default function ChatBox() {
                   <h2 className="text-xl font-semibold text-gray-800 ">
                     {chat.messages[currentMessage - 1].question.length > 100
                       ? `${chat.messages[currentMessage - 1].question.substring(
-                          0,
-                          100
-                        )}...`
+                        0,
+                        100
+                      )}...`
                       : chat.messages[currentMessage - 1].question}
                   </h2>
                   <p className="h-6 min-w-6 bg-gray-200 rounded-full px-2 text-sm text-gray-600 flex items-center justify-center">

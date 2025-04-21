@@ -9,9 +9,8 @@ export async function askQuestion(formData: FormData) {
   if (!question || typeof question !== "string") {
     return { status: false, answer: "Question is required" };
   }
-  console.log(question);
   const ai_response = await axios.post("http://localhost:11434/api/generate", {
-    model: process.env.AI_MODEL, // or your model name
+    model: process.env.AI_MODEL,
     prompt: question,
     stream: false,
   });

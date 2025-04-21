@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, House, MessageCircle, Plus } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -42,7 +42,7 @@ export function AppSidebar(prop: any) {
             <SidebarGroup>
               <SidebarGroupLabel asChild>
                 <CollapsibleTrigger>
-                  Saved Chat
+                  <MessageCircle className="mr-2" />Saved Chat
                   <ChevronDown className="ml-auto rotate-270 transition-transform group-data-[state=open]/collapsible:rotate-360" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -59,8 +59,28 @@ export function AppSidebar(prop: any) {
                       </SidebarMenuItem>
                     ))}
                   </SidebarMenuSub>
+                  <SidebarMenu>
+
+
+
+                  </SidebarMenu>
                 </SidebarGroupContent>
               </CollapsibleContent>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={"/chat/new"}>
+                    <Plus />
+                    <span>{"New Chat"}</span>
+                  </a>
+                </SidebarMenuButton>
+                <SidebarMenuButton asChild>
+                  <a href={"/"}>
+                    <House />
+                    <span>{"Home"}</span>
+                  </a>
+                </SidebarMenuButton>
+
+              </SidebarMenuItem>
             </SidebarGroup>
           </Collapsible>
         </SidebarMenu>
