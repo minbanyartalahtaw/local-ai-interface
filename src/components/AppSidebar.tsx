@@ -1,3 +1,4 @@
+"use client"
 import { ChevronDown, MessageSquare } from "lucide-react";
 import {
   Collapsible,
@@ -17,202 +18,21 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import "@/app/globals.css";
+import { use, useEffect, useState } from "react";
 
-// Menu items.
-const items = [
-  /* {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  ,
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  ,
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  ,
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  ,
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  ,
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  }, */
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-  {
-    title: "Home",
-    url: "#",
-    icon: MessageSquare,
-  },
-];
+interface SideBarChat {
+  id: string;
+  title: string;
+}
 
-export function AppSidebar() {
+
+export function AppSidebar(prop: any) {
+  const chat = prop
+  const [items, setItems] = useState<SideBarChat[]>([chat.prop])
+  useEffect(() => {
+    setItems(chat.prop)
+  })
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -232,8 +52,7 @@ export function AppSidebar() {
                     {items.map((item, index) => (
                       <SidebarMenuItem key={index}>
                         <SidebarMenuButton asChild>
-                          <a href={item?.url || "#"}>
-                            {item?.icon && <item.icon />}
+                          <a href={item?.id ? `/chat/${item.id}` : "#"}>
                             <span>{item?.title || "Home"}</span>
                           </a>
                         </SidebarMenuButton>

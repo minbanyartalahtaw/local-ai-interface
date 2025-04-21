@@ -1,17 +1,8 @@
 "use server";
 import axios from "axios";
+import getClient from "../../lib/mongodb"
 
-interface Message {
-  id: number;
-  question: string;
-  answer: string;
-}
 
-interface Chat {
-  id: number;
-  title: string;
-  messages: Message[];
-}
 
 export async function askQuestion(formData: FormData) {
   const question = formData.get("question");
@@ -20,7 +11,7 @@ export async function askQuestion(formData: FormData) {
   }
   console.log(question);
   const ai_response = await axios.post("http://localhost:11434/api/generate", {
-    model: "mistral:latest", // or your model name
+    model: process.env.AI_MODEL, // or your model name
     prompt: question,
     stream: false,
   });
@@ -29,5 +20,9 @@ export async function askQuestion(formData: FormData) {
 }
 
 export async function createChat(Chat: Chat) {
-  console.log(Chat);
+  const client = await getClient();
+  const db  = client.db("bro-code");
+  const collection = db.collection("Chat");
+  await collection.insertOne({Chat})
+  return { status: "success", Message: "Chat created successfully" };
 }
