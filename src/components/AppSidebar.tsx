@@ -35,14 +35,14 @@ export function AppSidebar(prop: any) {
   }, []);
 
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar >
+      <SidebarContent className="bg-[#333]">
         <SidebarMenu>
-          <Collapsible defaultOpen className="group/collapsible">
+          <Collapsible defaultOpen className="group/collapsible text-white">
             <SidebarGroup>
               <SidebarGroupLabel asChild>
-                <CollapsibleTrigger>
-                  <MessageCircle className="mr-2" />Saved Chat
+                <CollapsibleTrigger className="text-white">
+                  <MessageCircle className="mr-2 " />Saved Chat
                   <ChevronDown className="ml-auto rotate-270 transition-transform group-data-[state=open]/collapsible:rotate-360" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -86,7 +86,11 @@ export function AppSidebar(prop: any) {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter />
+      <SidebarFooter className="bg-[#333]">
+        <div className="text-sm text-white text-center">
+          Press <kbd className="px-1 py-0.5 rounded">⌘</kbd> + <kbd className="px-1 py-0.5  rounded">B</kbd> to open sidebar
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

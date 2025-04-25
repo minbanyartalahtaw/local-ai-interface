@@ -82,15 +82,33 @@ export default function ChatBox() {
           <div className="flex gap-4 h-full">
             {/* Left Skeleton */}
             <div className="w-1/2 bg-transparent rounded-md shadow-sm p-4 flex flex-cols items-center justify-center ">
-              <div className="h-16 w-16 border-4 border-gray-300 border-t-gray-800 rounded-full animate-spin"></div>
+
+              <div className="relative w-full h-full  rounded-lg overflow-hidden">
+                {/* Pulsing circle animation */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    <div className="w-20 h-20 border-4 border-[#555] rounded-full animate-ping opacity-75"></div>
+
+                    <div className="absolute top-0 w-20 h-20 border-4 border-x-[#444] border-y-white rounded-full animate-spin"></div>
+                  </div>
+                </div>
+
+                {/* Loading text */}
+                <div className="absolute bottom-1/4 left-0 right-0 text-center">
+                  <p className="text-gray-400 text-sm tracking-wider animate-pulse">
+                    Let Me Think...
+                  </p>
+                </div>
+              </div>
+
             </div>
 
             {/* Right Skeleton */}
-            <div className="w-1/2 bg-gray-100 rounded-lg shadow-sm p-6">
+            <div className="w-1/2 bg-[#444] rounded-lg shadow-sm p-6">
               <div className="animate-pulse">
                 <div className="h-8 bg-gray-200 rounded-md w-3/4 mb-4"></div>
                 <div className="space-y-3">
-                  {[...Array(4)].map((_, i) => (
+                  {[...Array(10)].map((_, i) => (
                     <div
                       key={i}
                       className="h-4 bg-gray-200 rounded-md w-full"></div>
@@ -110,41 +128,42 @@ export default function ChatBox() {
       <div className="w-full h-full">
         <ResizablePanelGroup direction="horizontal">
           {/* Left */}
-          <ResizablePanel className=" pr-5">
-            <div className="bg-white w-full h-full rounded-md relative flex flex-col">
+          <ResizablePanel className="pr-5">
+            <div className="bg-[#333] w-full h-full rounded-md relative flex flex-col">
               <div className="flex-1 overflow-hidden">
-                <div className="p-4 h-full flex flex-col">
+                <div className=" h-full flex flex-col">
                   {/* Drawer */}
                   <Drawer>
                     <DrawerTrigger>
-                      <p className="w-full py-2.5 mb-5 px-4 flex items-center justify-center gap-2 text-gray-700 hover:text-gray-900 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm hover:shadow-md">
+                      <p className="min-w-50 py-2.5  px-4 flex items-center justify-center gap-2 text-gray-300 hover:text-white bg-[#444] hover:bg-[#555] border border-[#555] rounded-lg transition-colors duration-200 cursor-pointer shadow-sm hover:shadow-md">
                         Chat Settings <Settings className="w-4 h-4" />
                       </p>
                     </DrawerTrigger>
 
-                    <DrawerContent className="max-h-[90vh] overflow-y-auto">
+                    <DrawerContent className="max-h-[90vh] overflow-y-auto bg-[#333]">
                       <DrawerHeader>
-                        <DrawerTitle className="text-center text-xl md:text-2xl">
+                        <DrawerTitle className="text-center text-xl md:text-2xl text-white">
                           Are you absolutely sure?
                         </DrawerTitle>
                         {/* Container */}
                         <div className="min-h-[200px] p-4 flex items-center justify-center">
-                          <div className=" w-full max-w-4xl mx-auto  bg-gray-200 rounded-md ">
-                            <div className="h-24 md:h-20 flex  items-center justify-center  p-4">
-                              <h3 className="text-sm md:text-base">
+                          <div className="w-full max-w-4xl mx-auto bg-[#444] rounded-md">
+                            <div className="h-24 md:h-20 flex items-center justify-center p-4">
+                              <h3 className="text-sm md:text-base text-gray-300">
                                 You asked
                               </h3>
-                              <span className="text-2xl md:text-3xl font-bold mx-2 md:mx-4">
+                              <span className="text-2xl md:text-3xl font-bold mx-2 md:mx-4 text-white">
                                 {chat.messages.length}
                               </span>
-                              <h3 className="text-sm md:text-base">
+                              <h3 className="text-sm md:text-base text-gray-300">
                                 Questions
                               </h3>
                             </div>
 
-                            <div className="h-24 md:h-20 flex  items-center justify-center gap-2 p-4">
+                            <div className="h-24 md:h-20 flex items-center justify-center gap-2 p-4">
                               <Button
-                                variant="outline"
+                                variant="secondary"
+                                className=""
                                 onClick={() => router.push("/chat/new")}>
                                 <Plus className="mr-1 h-4 w-4" />
                                 New Chat
@@ -157,17 +176,17 @@ export default function ChatBox() {
                                 }}>
                                 Delete
                               </Button>
-                              <Button disabled variant="outline">
+                              <Button disabled variant="outline" className="bg-[#555] text-gray-400">
                                 Saved Chat
                               </Button>
                               <Dialog>
                                 <DialogTrigger asChild></DialogTrigger>
-                                <DialogContent className="w-[90vw] max-w-[425px] p-4">
+                                <DialogContent className="w-[90vw] max-w-[425px] p-4 bg-[#444]">
                                   <DialogHeader>
-                                    <DialogTitle className="mb-3 text-lg md:text-xl">
+                                    <DialogTitle className="mb-3 text-lg md:text-xl text-white">
                                       Save This Chat
                                     </DialogTitle>
-                                    <DialogDescription>
+                                    <DialogDescription className="text-gray-300">
                                       {chat.messages.length} Questions
                                     </DialogDescription>
                                   </DialogHeader>
@@ -176,7 +195,7 @@ export default function ChatBox() {
                                     <input
                                       type="text"
                                       name="chat-name"
-                                      className="w-full border-2 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+                                      className="w-full border-2 border-[#555] bg-[#444] text-white rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
                                       placeholder="Enter Chat Name"
                                       defaultValue={chat.title}
                                     />
@@ -191,7 +210,7 @@ export default function ChatBox() {
                         <DrawerClose asChild>
                           <Button
                             variant="outline"
-                            className="max-w-100 mx-auto">
+                            className="max-w-100 mx-auto ">
                             Close
                           </Button>
                         </DrawerClose>
@@ -199,16 +218,18 @@ export default function ChatBox() {
                     </DrawerContent>
                   </Drawer>
 
+                  <h1 className="text-xl font-semibold text-gray-200 px-4 my-6">{chat.title}</h1>
+
                   <div className="space-y-2 overflow-scroll h-[calc(100vh-200px)]">
                     {chat.messages.map((message, index) => (
                       <div key={message.id} className="flex items-center">
                         <div
                           className={`p-3 w-full ${currentMessage === message.id
-                            ? "bg-blue-100"
-                            : "bg-gray-100"
+                            ? "bg-[#444]"
+                            : "bg-[#3a3a3a]"
                             } rounded-md transition-colors cursor-pointer select-none hover:shadow-md`}
                           onClick={() => changeCurrentMessage(message.id)}>
-                          <h3 className="text-sm text-gray-700">
+                          <h3 className="text-sm text-gray-200">
                             {index + 1}. {message.question}
                           </h3>
                         </div>
@@ -265,12 +286,12 @@ export default function ChatBox() {
           <ResizableHandle withHandle />
 
           {/* Right */}
-          <ResizablePanel className=" pl-8">
+          <ResizablePanel className="">
             {" "}
-            <div className="bg-gray-100 w-full h-full rounded-lg overflow-hidden">
-              <div className="h-full flex flex-col p-6 bg-white rounded-lg shadow-sm">
-                <div className="mb-4 border-b pb-3 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-gray-800 ">
+            <div className=" w-full h-full rounded-lg overflow-hidden pl-5">
+              <div className="h-full flex flex-col  rounded-lg shadow-sm">
+                <div className="mb-4 border-b border-gray-600 pb-3 pb-3 flex justify-between items-center">
+                  <h2 className="text-xl font-semibold text-gray-200">
                     {chat.messages[currentMessage - 1].question.length > 100
                       ? `${chat.messages[currentMessage - 1].question.substring(
                         0,
@@ -278,13 +299,13 @@ export default function ChatBox() {
                       )}...`
                       : chat.messages[currentMessage - 1].question}
                   </h2>
-                  <p className="h-6 min-w-6 bg-gray-200 rounded-full px-2 text-sm text-gray-600 flex items-center justify-center">
+                  <p className="h-6 min-w-6 bg-[#444] rounded-full px-2 text-sm text-gray-300 flex items-center justify-center">
                     {currentMessage}
                   </p>
                 </div>
-                <div className="flex-1 overflow-auto bg-gray-50 rounded-lg">
+                <div className="flex-1 overflow-auto bg-[#3a3a3a] rounded-lg">
                   <div className="p-6">
-                    <div className="prose prose-lg max-w-none text-gray-700">
+                    <div className="prose prose-lg max-w-none">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
@@ -293,7 +314,7 @@ export default function ChatBox() {
                               className || ""
                             );
                             return match ? (
-                              <pre className="bg-gray-900 p-4 rounded-lg">
+                              <pre className="bg-gray-800 p-4 rounded-lg">
                                 <code
                                   className={`${className} text-green-400`}
                                   dangerouslySetInnerHTML={{
@@ -309,7 +330,7 @@ export default function ChatBox() {
                               </pre>
                             ) : (
                               <code
-                                className={`${className} bg-gray-200 text-gray-800 px-2 py-1 rounded`}
+                                className={`${className} bg-gray-700 text-gray-200 px-2 py-1 rounded`}
                                 {...props}>
                                 {children}
                               </code>
@@ -317,35 +338,35 @@ export default function ChatBox() {
                           },
                           // Add styling for other markdown elements
                           p: ({ children }) => (
-                            <p className="text-gray-700 mb-4">{children}</p>
+                            <p className="text-gray-300 mb-4">{children}</p>
                           ),
                           h1: ({ children }) => (
-                            <h1 className="text-3xl font-bold text-gray-900 mb-6">
+                            <h1 className="text-3xl font-bold text-gray-200 mb-6">
                               {children}
                             </h1>
                           ),
                           h2: ({ children }) => (
-                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                            <h2 className="text-2xl font-semibold text-gray-200 mb-4">
                               {children}
                             </h2>
                           ),
                           h3: ({ children }) => (
-                            <h3 className="text-xl font-medium text-gray-800 mb-3">
+                            <h3 className="text-xl font-medium text-gray-200 mb-3">
                               {children}
                             </h3>
                           ),
                           ul: ({ children }) => (
-                            <ul className="list-disc list-inside mb-4 text-gray-700">
+                            <ul className="list-disc list-inside mb-4 text-gray-300">
                               {children}
                             </ul>
                           ),
                           ol: ({ children }) => (
-                            <ol className="list-decimal list-inside mb-4 text-gray-700">
+                            <ol className="list-decimal list-inside mb-4 text-gray-300">
                               {children}
                             </ol>
                           ),
                           blockquote: ({ children }) => (
-                            <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4">
+                            <blockquote className="border-l-4 border-gray-600 pl-4 italic text-gray-400 my-4">
                               {children}
                             </blockquote>
                           ),

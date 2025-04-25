@@ -49,12 +49,19 @@ export default async function RootLayout({
       <body className={`${ubuntu.variable}  antialiased`}>
         <SidebarProvider defaultOpen={defaultOpen}>
           <AppSidebar prop={finalItems} />
-          <main>
-            <SidebarTrigger />
+          <main className="bg-[#333]">
+            <SidebarTrigger className="text-gray-300 hover:bg-[#333] hover:text-white cursor-pointer" />
             {children}
             <footer className="fixed bottom-0 w-full text-center pb-2">
-              <p className="text-[10px] text-gray-600">
-                © {new Date().getFullYear()} Bro Code. All rights reserved.
+              <p className="text-[10px] text-white">
+                © {new Date().getFullYear()} Bro Code. Developed By{" "}
+                <a
+                  href={"https://github.com/minbanyartalahtaw"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline">
+                  dumark
+                </a>
               </p>
             </footer>
           </main>
